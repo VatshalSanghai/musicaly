@@ -67,17 +67,17 @@ app.use('/api/songs', songRoutes);
 app.use('/api/albums', albumRoutes);
 app.use('/api/stats', statRoutes);
 
-if(process.env.NODE_ENV === "development"){
+if(process.env.NODE_ENV === "production"){
     app.use(express.static(path.join(__dirname,"../frontend/dist")));
     app.get("*",(req,res)=>{
-        res.sendFile(path.join(__dirname,"../frontend","dist", "index.html"));
+        res.sendFile(path.resolve(__dirname,"../frontend","dist", "index.html"));
     }); 
 }
 
 //error middleware
 app.use((err, req, res, next) => {
     console.log(err);
-    res.status(500).json({ success: false, message: process.env.NODE_ENV === "development" ? "Internal server error" : err.message });
+    res.status(500).json({ success: false, message: process.env.NODE_ENV === "production" ? "Internal server error" : err.message });
 });
 
 httpServer.listen(port, () => {
